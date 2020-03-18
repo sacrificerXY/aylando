@@ -14,3 +14,7 @@
 	path = submodules/imgui-sfml-sacxy
 	url = https://github.com/sacrificerXY/imgui-sfml.git
 	shallow = true
+[submodule "fastnoise"]
+	path = submodules/fastnoise
+	url = https://github.com/henne90gen/FastNoise.git
+	shallow = true
