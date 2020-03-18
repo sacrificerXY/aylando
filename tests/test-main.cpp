@@ -1,7 +1,21 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include <doctest/doctest.h>
 
-int factorial(int number) { return number <= 1 ? number : factorial(number - 1) * number; }
+#include <aylando/utils/Array2d.h>
+using namespace aylando;
 
-TEST_CASE("foo test") {
+TEST_CASE("Array2d") {
+    auto array = utils::Array2d<int, 3, 10>{};
+
+    SUBCASE("size") {
+        CHECK(array.width == 3);
+        CHECK(array.height == 10);
+    }
+
+    SUBCASE("reset") {
+        reset(array, 123);
+        for (int i : array) {
+            CHECK(i == 123);
+        }
+    }
 }
