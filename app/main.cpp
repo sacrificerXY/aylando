@@ -8,18 +8,25 @@
 #include <imgui.h>
 #include <imgui-SFML.h>
 
-#include <_sample/_sample.h>
+#include <aylando/utils/Array2d.h>
 
+namespace ay = aylando;
 
 int main()
 {
-    foo f(100);
-    f.add(60);
-    sf::RenderWindow window(sf::VideoMode(f.bar * 4, f.bar * 3), "ImGui + SFML = <3");
+    ay::utils::Array2d<int, 10, 10> arr;
+    reset(arr);
+    arr(0, 0) = 123;
+    for (int x = 0; x < arr.width; x++) {
+        for (int y = 0; y < arr.height; y++) {
+            std::cout << x << ',' << y << " = " << arr(x, y) << '\n';
+        }
+    }
+    sf::RenderWindow window(sf::VideoMode(640, 480), "ImGui + SFML = <3");
     window.setFramerateLimit(60);
     ImGui::SFML::Init(window);
 
-    sf::CircleShape shape(f.bar);
+    sf::CircleShape shape(100);
     shape.setFillColor(sf::Color::Green);
 
     sf::Clock deltaClock;
