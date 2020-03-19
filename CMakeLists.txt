@@ -13,6 +13,10 @@ set(BUILD_SHARED_LIBS OFF) # use static linking
 git_update_submodule("sfml" "CMakeLists.txt")
 add_subdirectory("submodules/sfml")
 
+# FastNoise
+git_update_submodule("fastnoise" "CMakeLists.txt")
+add_subdirectory("submodules/fastnoise")
+
 # imgui
 git_update_submodule("imgui" "imgui.h")
 

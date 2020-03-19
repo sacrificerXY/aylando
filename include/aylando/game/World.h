@@ -4,6 +4,6 @@ namespace aylando::game
 {
     struct World
     {
-        utils::Array2d<int, 40, 40> tiles;
+        utils::Array2d<int, 400, 400> tiles;
     };
 }
