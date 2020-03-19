@@ -2,6 +2,10 @@
 #include <cmath>
 #include <random>
 #include <ctime>
+#include <array>
+#include <iterator>
+#include <algorithm>
+#include <string>
 
 #include <SFML/Graphics.hpp>
 
@@ -101,6 +105,14 @@ int main()
     // rect.setOutlineColor(sf::Color(0, 255, 0, 50));
     // rect.setOutlineThickness(0);
 
+    // imgui state
+    const std::array edit_modes = {
+        std::string{""},
+        std::string{"Add"},
+        std::string{"Remove"},
+    };
+    int edit_mode = 0;
+
     sf::Clock deltaClock;
     while (window.isOpen()) {
         sf::Event event;
@@ -114,8 +126,36 @@ int main()
 
         ImGui::SFML::Update(window, deltaClock.restart());
 
+        auto mouse = sf::Mouse::getPosition(window);
+        auto mouse_tile = sf::Vector2i(mouse.x / tile_size, mouse.y / tile_size);
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            if (edit_mode == 1) { // add
+                world.tiles(mouse_tile.x, mouse_tile.y) = 1;
+            }
+            if (edit_mode == 2) { // remove
+                world.tiles(mouse_tile.x, mouse_tile.y) = 0;
+            }
+        }
+
+
         ImGui::Begin("Sample Project");
-        ImGui::Button("Click Me!");
+        
+        if (ImGui::BeginCombo("Edit Mode", edit_modes[edit_mode].c_str())) // The second parameter is the label previewed before opening the combo.
+        {
+            for (auto mode : edit_modes)
+            {
+                bool is_selected = mode == edit_modes[edit_mode];
+                if (ImGui::Selectable(mode.c_str(), is_selected))
+                    edit_mode = std::distance(
+                        edit_modes.begin(),
+                        std::find(
+                            edit_modes.begin(), edit_modes.end(),
+                            mode));
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();   // Set the initial focus when opening the combo (scrolling + for keyboard navigation support in the upcoming navigation branch)
+            }
+            ImGui::EndCombo();
+        }
         ImGui::End();
 
         window.clear();
@@ -141,6 +181,14 @@ int main()
                 window.draw(rect);
             }
         }
+        if (edit_mode != 0) {
+            rect.setPosition(mouse_tile.x * tile_size, mouse_tile.y * tile_size);
+            if (edit_modes[edit_mode] == "Add")
+                rect.setFillColor({0, 255, 0, 100});
+            else if (edit_modes[edit_mode] == "Remove")
+                rect.setFillColor({255, 0, 0, 100});
+        }       
+        window.draw(rect);
         ImGui::SFML::Render(window);
         window.display();
     }
